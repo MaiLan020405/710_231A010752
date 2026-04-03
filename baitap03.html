@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Bài tập 3 - Countdown</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <nav><ul><li><a href="index.html">Quay lại Trang chủ</a></li></ul></nav>
+    </header>
+    <div class="container">
+        <h2>Thời gian còn lại</h2>
+        <div id="timer">10:00</div>
+
+        <div class="explanation">
+            <strong>Giải thích logic tư duy:</strong>
+            <ul>
+                <li><strong>Memory Leak:</strong> Lưu ID của setInterval vào một biến. Khi thời gian về 0, PHẢI gọi <code>clearInterval(timerId)</code> để giải phóng bộ nhớ, ngăn vòng lặp chạy ngầm mãi mãi.</li>
+                <li><strong>Đồng bộ thời gian:</strong> Hàm setInterval của JS không chính xác 100% (bị trễ do main thread). Khi Deploy thực tế, thời gian đếm ngược không nên dựa hoàn toàn vào đồng hồ máy khách (vì người dùng có thể đổi giờ máy tính). Cách tối ưu là lấy Timestamp hiện tại từ Server API lúc bắt đầu, và tính toán độ chênh lệch.</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        let timeLeft = 10 * 60; // 10 phút = 600 giây
+        const timerElement = document.getElementById('timer');
+
+        const countdown = setInterval(function() {
+            timeLeft--;
+
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+
+            // Định dạng chuỗi MM:SS
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+
+            timerElement.textContent = `${minutes}:${seconds}`;
+
+            // Thêm animation khi dưới 1 phút
+            if (timeLeft <= 60 && timeLeft > 0) {
+                timerElement.classList.add('warning');
+            }
+
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                timerElement.textContent = "00:00";
+                timerElement.classList.remove('warning');
+                setTimeout(() => { alert("Đã hết thời gian!"); }, 100);
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

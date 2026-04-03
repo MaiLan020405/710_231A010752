@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Bài tập 2 - Đăng ký</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <nav><ul><li><a href="index.html">Quay lại Trang chủ</a></li></ul></nav>
+    </header>
+    <div class="container">
+        <h2>Form Đăng ký</h2>
+        <form id="regForm">
+            <div class="form-group">
+                <label>Họ tên:</label>
+                <input type="text" id="name" required>
+            </div>
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="email" id="email" required>
+            </div>
+            <div class="form-group">
+                <label>Mật khẩu (Tối thiểu 8 ký tự, có hoa, thường, số):</label>
+                <input type="password" id="password" required>
+            </div>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="terms" required> Tôi đồng ý với điều khoản
+                </label>
+            </div>
+            <button type="submit">Đăng ký</button>
+        </form>
+        <p id="formMsg" style="margin-top: 15px; font-weight: bold;"></p>
+
+        <div class="explanation">
+            <strong>Giải thích logic tư duy:</strong>
+            <ul>
+                <li><strong>Xử lý submit:</strong> Dùng <code>e.preventDefault()</code> chặn hành vi tải lại trang mặc định của form. Kiểm tra mật khẩu bằng Regular Expression (Regex).</li>
+                <li><strong>Bảo mật dữ liệu cục bộ:</strong> Trong bài này yêu cầu lưu LocalStorage, nhưng thực tế việc lưu mật khẩu thô (plaintext) vào LocalStorage là KHÔNG an toàn vì bất kỳ script nào cũng có thể đọc được. Trong dự án thực tế, mật khẩu phải được gửi qua HTTPS và mã hóa (hash) ở server. Ở đây ta giả lập chỉ lưu thông tin Name và Email để minh họa.</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('regForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('password').value;
+            const msg = document.getElementById('formMsg');
+
+            // Regex: Ít nhất 8 ký tự, ít nhất 1 chữ hoa, 1 chữ thường, 1 số
+            const passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+
+            if (!passRegex.test(pass)) {
+                msg.textContent = "Lỗi: Mật khẩu không đủ mạnh!";
+                msg.style.color = "red";
+                return;
+            }
+
+            // Lưu dữ liệu (Khuyến cáo: Không lưu password thật vào LocalStorage)
+            const userData = { name, email };
+            localStorage.setItem('userData', JSON.stringify(userData));
+
+            msg.textContent = "Đăng ký thành công! Dữ liệu đã lưu cục bộ.";
+            msg.style.color = "green";
+            this.reset();
+        });
+    </script>
+</body>
+</html>
