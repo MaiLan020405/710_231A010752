@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Bài tập 1 - Sản phẩm</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <nav><ul><li><a href="index.html">Quay lại Trang chủ</a></li></ul></nav>
+    </header>
+    <div class="container">
+        <h2>Danh sách sản phẩm</h2>
+        <input type="text" id="searchInput" placeholder="Nhập tên sản phẩm để tìm...">
+        <p id="errorMsg" style="color: red; display: none;">Không tìm thấy sản phẩm nào!</p>
+        <div id="productList" class="grid-products"></div>
+
+        <div class="explanation">
+            <strong>Giải thích logic tư duy:</strong>
+            <ul>
+                <li><strong>Xử lý Input:</strong> Sử dụng sự kiện <code>input</code> để tìm kiếm realtime. Chuyển đổi cả input của người dùng và tên sản phẩm về chữ thường (<code>toLowerCase()</code>) để tìm kiếm không phân biệt hoa thường.</li>
+                <li><strong>Tránh Injection:</strong> Sử dụng <code>textContent</code> khi gán tên sản phẩm vào DOM thay vì <code>innerHTML</code>. Điều này đảm bảo nếu dữ liệu có chứa mã HTML/JS độc hại (XSS), nó sẽ chỉ hiển thị dưới dạng văn bản thuần túy.</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const products = [
+            { id: 1, name: "Laptop Dell XPS 15", price: "30.000.000đ" },
+            { id: 2, name: "Điện thoại iPhone 14", price: "20.000.000đ" },
+            { id: 3, name: "Bàn phím cơ Logitech", price: "2.000.000đ" },
+            { id: 4, name: "Chuột không dây Razer", price: "1.500.000đ" },
+            { id: 5, name: "Màn hình LG 27 inch", price: "5.000.000đ" }
+        ];
+
+        const productList = document.getElementById('productList');
+        const searchInput = document.getElementById('searchInput');
+        const errorMsg = document.getElementById('errorMsg');
+
+        function renderProducts(list) {
+            productList.innerHTML = '';
+            if (list.length === 0) {
+                errorMsg.style.display = 'block';
+            } else {
+                errorMsg.style.display = 'none';
+                list.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'product-card';
+                    // Sử dụng createElement và textContent để tránh XSS
+                    const h3 = document.createElement('h3');
+                    h3.textContent = item.name;
+                    const p = document.createElement('p');
+                    p.textContent = item.price;
+                    div.appendChild(h3);
+                    div.appendChild(p);
+                    productList.appendChild(div);
+                });
+            }
+        }
+
+        renderProducts(products);
+
+        searchInput.addEventListener('input', function(e) {
+            const keyword = e.target.value.toLowerCase().trim();
+            const filtered = products.filter(p => p.name.toLowerCase().includes(keyword));
+            renderProducts(filtered);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Phần 1: Lý thuyết</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul><li><a href="index.html">Quay lại Trang chủ</a></li></ul>
+        </nav>
+    </header>
+    <div class="container">
+        <h1>Phần 1: Lý thuyết (40 điểm)</h1>
+        
+        <h3>Câu 1: position: absolute và position: relative</h3>
+        <p><strong>Khác biệt:</strong> <code>relative</code> định vị phần tử tương đối so với vị trí bình thường của chính nó (không làm mất không gian cũ). <code>absolute</code> định vị phần tử tương đối so với phần tử cha gần nhất có thuộc tính position khác static (nó bị rút khỏi luồng tài liệu, không chiếm không gian).</p>
+        <p><strong>Ví dụ Responsive:</strong> Khi tạo một tooltip (chú thích). Nút bấm chứa tooltip sẽ có <code>position: relative</code>, còn hộp tooltip bên trong sẽ có <code>position: absolute</code>. Dù xem trên thiết bị nào, tooltip luôn bám theo nút bấm đó.</p>
+        <p><strong>Ảnh hưởng Deploy:</strong> CSS thuần túy không ảnh hưởng trực tiếp đến quá trình deploy server, nhưng responsive layout đảm bảo khi website được host và truy cập từ internet, giao diện sẽ không bị vỡ trên các thiết bị (điện thoại, máy tính) khác nhau.</p>
+
+        <h3>Câu 2: Domain, Hosting và Deploy</h3>
+        <p><strong>Quy trình:</strong> Bạn không cấu hình hosting trực tiếp bằng JavaScript, mà code JS của bạn sẽ được tải lên Hosting. Bạn mua Domain (tên miền) -> Đăng ký Hosting -> Upload code (HTML/CSS/JS) lên Hosting -> Cấu hình DNS.</p>
+        <p><strong>Vai trò DNS:</strong> Domain Name System đóng vai trò như danh bạ điện thoại, dịch tên miền (ví dụ: tenban.com) thành địa chỉ IP của máy chủ Hosting chứa mã nguồn của bạn.</p>
+        <p><strong>Công cụ không cần server riêng:</strong> GitHub Pages, Netlify, Vercel.</p>
+        <p><strong>Rủi ro bảo mật:</strong> Nếu đưa các API Key nhạy cảm (như key database) vào code JavaScript frontend, khi deploy công khai, người dùng có thể dễ dàng lấy được key này qua DevTools và đánh cắp dữ liệu.</p>
+
+        <h3>Câu 3: let, const và var</h3>
+        <p><strong>So sánh:</strong> <code>var</code> có scope ở cấp hàm (function scope), có hoisting và khởi tạo là undefined. <code>let</code> và <code>const</code> có scope ở cấp khối (block scope), có hoisting nhưng rơi vào vùng "Temporal Dead Zone" (không thể truy cập trước khi khai báo). <code>const</code> không thể gán lại giá trị.</p>
+        <p><strong>Ví dụ lỗi:</strong> <code>console.log(a); let a = 5;</code> (Lỗi ReferenceError do truy cập let trước khi khởi tạo).</p>
+        <p><strong>Cách Debug:</strong> Nhấn F12 mở Chrome DevTools, qua tab "Sources", đặt Breakpoint tại dòng code nghi ngờ để theo dõi sự thay đổi của biến trong phần "Scope".</p>
+
+        <h3>Câu 4: Event Delegation</h3>
+        <p><strong>Khái niệm:</strong> Là kỹ thuật gắn một Event Listener duy nhất vào phần tử cha, thay vì gắn nhiều Listener vào từng phần tử con. Nó tận dụng cơ chế Event Bubbling của DOM.</p>
+        <p><strong>Ví dụ:</strong> Một danh sách <code>&lt;ul&gt;</code> động có thể thêm/bớt thẻ <code>&lt;li&gt;</code>. Thay vì gắn sự kiện click cho từng thẻ li, ta gắn cho ul. <code>ul.addEventListener('click', (e) => { if(e.target.tagName === 'LI') console.log('Đã click LI'); })</code></p>
+        <p><strong>Lợi ích hiệu suất:</strong> Tiết kiệm bộ nhớ (chỉ có 1 listener thay vì hàng trăm). HTML/CSS render nhanh hơn và không cần phải gán lại sự kiện bằng JS mỗi khi tạo thêm một phần tử DOM mới.</p>
+    </div>
+</body>
+</html>
